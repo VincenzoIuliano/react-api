@@ -1,9 +1,10 @@
 import PostCard from '../PostCard/PostCard'
 import style from './Main.module.css'
-import { initialPosts  } from '../../posts.js'
+// import { initialPosts  } from '../../posts.js'
 import Tags from '../tags/Tags.jsx'
 import { useEffect, useState } from 'react'
 import Button from '../Button/Button.jsx'
+import axios from 'axios'
 
 const initialFormData = {
   title: '',
@@ -14,9 +15,11 @@ const initialFormData = {
   published: true
 }
 
+const API_BASE_URI = 'http://localhost:3000/'
+
 export default function Main() {
 
-  const [posts,setPosts] = useState(initialPosts)
+  const [posts,setPosts] = useState([])
   const [publishedPosts, setPublishedPosts ] = useState([])
   const [tags,setTags] = useState([])
   const [formData,setFormData] = useState(initialFormData)
@@ -70,6 +73,20 @@ export default function Main() {
 
   }
 
+  function fetchPosts() {
+    axios.get(`${API_BASE_URI}posts`)
+    .then(res => {
+      console.log('post res',res);      
+    })
+    .catch(err => {
+      console.error(err)
+    })
+  }
+
+  useEffect(()=> {
+    fetchPosts()
+  },[])
+
   function handleFormData(e) {
 
     const { name, value, type, checked } = e.target
@@ -100,10 +117,10 @@ export default function Main() {
               <label htmlFor="category">Categoria</label>
               <select value={formData.category} onChange={handleFormData} name="category" id="category">
                 <option value="">Seleziona categoria</option>
-                <option value="backend">Backend</option>
-                <option value="frontend">Frontend</option>
-                <option value="express">Express</option>
-                <option value="react">React</option>
+                <option value="pasta">Pasta</option>
+                <option value="pane">Pane</option>
+                <option value="ricette">Ricette</option>
+                <option value="casa">Casa</option>
               </select>
             </div>
             <div>
