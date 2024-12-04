@@ -7,10 +7,11 @@
 }
 
 .tag_item {
-	color: white;
+	color: black;
 	border-radius: 8px;
 	padding: 4px 12px;
 	text-align: center;
+	background-color: aqua;
 }
 
 .html {

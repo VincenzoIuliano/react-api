@@ -3,6 +3,7 @@ import style from './PostCard.module.css'
 import placeholder from '../../assets/placeholder.webp'
 import Tags from '../tags/Tags';
 import TrashIcon from '../ui/trash-icon';
+import { API_BASE_URI } from '../Main/Main';
 
 export default function PostCard({ onDelete = () => {}, post = {} }) {
 
@@ -23,7 +24,7 @@ export default function PostCard({ onDelete = () => {}, post = {} }) {
 
   return (
     <div className={style.card}>
-      <img className={style.image} src={image || placeholder} alt="" />
+      <img className={style.image} src={image ? API_BASE_URI + image : placeholder} alt="" />
       <div className={style.card_body}>
         <h3 className={style.card_title}>{title}</h3>
         <Tags tags={tags} />

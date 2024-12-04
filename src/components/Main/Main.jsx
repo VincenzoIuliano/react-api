@@ -15,7 +15,7 @@ const initialFormData = {
   published: true
 }
 
-const API_BASE_URI = 'http://localhost:3000/'
+export const API_BASE_URI = 'http://localhost:3000/'
 
 export default function Main() {
 
@@ -56,27 +56,40 @@ export default function Main() {
     // const newTitle = title.trim()
     // if(newTitle === '') return
 
-    const post = {
-      id: Date.now(),
+    const newPost = {
       ...formData,
       tags: formData.tags.split(',').map(tag => tag.trim())
     }
 
-    setPosts([...posts,post])
-    setFormData(initialFormData)
+    axios.post(`${API_BASE_URI}posts`,newPost)
+    .then(res => {
+      // console.log(res);
+      setPosts([...posts,res.data])
+      setFormData(initialFormData)
+      console.log(posts);
+    })
+    .catch(err => console.error(err))
 
   }
 
   function deletePost(id) {
+    axios.delete(`${API_BASE_URI}posts/${id}`)
+    .then(() => {
+      setPosts(posts.filter((post)=> post.id !== id))
+    })
+    .catch(err => {
+      console.error(err)
+    }
+    )
 
-    setPublishedPosts(publishedPosts.filter(post => post.id !== id ))
-
+    // setPublishedPosts(publishedPosts.filter(post => post.id !== id ))
   }
 
   function fetchPosts() {
     axios.get(`${API_BASE_URI}posts`)
     .then(res => {
-      console.log('post res',res);      
+      console.log('post res',res);   
+      setPosts(res.data)   
     })
     .catch(err => {
       console.error(err)
@@ -141,14 +154,14 @@ export default function Main() {
         <div className="container">
           <h1 className={style.section_title}>Il mio blog</h1>
         </div>
-        <div className="container">
+        {/* <div className="container">
           <Tags className={style.tags_centered } tags={tags} />
-        </div>
+        </div> */}
         <div className="container">
           <div className="row">
             { publishedPosts.map((el) => (
               <div key={el.id} className="col-4">
-                <PostCard onDelete={() => deletePost(el.id)} post={el} />
+                <PostCard deletePost={deletePost} onDelete={() => deletePost(el.id)} post={el} />
               </div>
             ))}          
           </div>
